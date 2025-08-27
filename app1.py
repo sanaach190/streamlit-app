@@ -141,6 +141,7 @@ if submit:
 
     df.to_excel(fichier_excel, index=False)
     st.success(f"✅ Données enregistrées dans *{fichier_excel}*")
-    df = pd.read_excel("nom_du_fichier.xlsx")  # mettre le nom exact
+    df = pd.read_excel("historique.xlsx")  # mettre le nom exact
     st.write(df)
+
 
