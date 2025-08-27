@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 import os
+import openpyxl
 
 st.set_page_config(page_title="Calcul Performance Turbine", layout="centered")
 
@@ -66,18 +67,19 @@ if submit:
 
     # Calcul rendement mesuré
     rendement_mesure = (puissance_nette * 3600) / (masse_fioul * pci) if masse_fioul > 0 else 0
-    rendement_corrige = rendement_mesure * aTA / facteurs_denominateur if facteurs_denominateur > 0 else 0
+
 
     # Consommation spécifique (g/kWh)
     conso_specifique = (masse_fioul ) / energie_produite if energie_produite > 0 else 0
 
     # Heat Rate Mesuré (kJ/kWh)
-    HRM = (masse_fioul * pci) / energie_produite if energie_produite > 0 else 0
+    HRM = ((masse_fioul * pci ) / energie_produite) / 1000 if energie_produite > 0 else 0
+
 
     # PMC et HRMC
     PMC = (puissance_nette * aTA) / facteurs_denominateur if facteurs_denominateur > 0 else 0
-    HRMC = HRM * aTA / facteurs_denominateur if facteurs_denominateur > 0 else 0
-
+    HRMC = (HRM * aTA ) / facteurs_denominateur if facteurs_denominateur > 0 else 0
+    rendement_corrige = 3600 / HRMC if HRMC > 0 else 0
     # Affichage résultats
     st.success("✅ Résultats :")
     st.write(f"Volume apparent : *{volume_apparent:.2f} L*")
